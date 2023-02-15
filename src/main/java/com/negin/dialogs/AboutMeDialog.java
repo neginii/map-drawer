@@ -1,9 +1,11 @@
 package com.negin.dialogs;
 
-import com.negin.frames.MainFrame;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 
 public class AboutMeDialog extends JDialog {
 

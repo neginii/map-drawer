@@ -6,8 +6,6 @@ import com.negin.menus.HelpMenu;
 import com.negin.panels.ButtonPanel;
 import com.negin.panels.ContentPanel;
 
-import java.io.IOException;
-
 public class Map {
 
     public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package com.negin.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.negin.dialogs.NetworkProblemDialog;
 import com.negin.models.Coordinate;
 
 import java.io.BufferedReader;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ClientService {
 
-    public List<Coordinate> getCoordinates() throws IOException {
+    public List<Coordinate> getCoordinates() {
         List<Coordinate> data = new ArrayList<>();
         int retries = 10;
         while (retries > 0) {
@@ -44,7 +45,8 @@ public class ClientService {
                 }
                 if (retries == 0) {
                     log.error("Didn't succeed to connect the remote server after 10 attempts due to '{}'", e.getMessage());
-                    throw e;
+                    NetworkProblemDialog networkProblemDialog = new NetworkProblemDialog(e.getMessage());
+                    networkProblemDialog.setVisible(true);
                 }
             }
         }

@@ -7,14 +7,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
-
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -38,11 +36,10 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
     private Polygon mapShape;
     private transient List<Pin> pins = new ArrayList<>();
 
-    public SomeMap(List<Coordinate> coordinates) {
+    public SomeMap() {
 
         this.setLayout(new BorderLayout());
         this.setVisible(true);
-       coordinates.forEach(coordinate -> addPin(Integer.parseInt(coordinate.getX()), Integer.parseInt(coordinate.getY()), coordinate.getName(), Color.magenta));
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
         this.setVisible(true);
@@ -59,11 +56,11 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
         g2d.setTransform(transform);
         g2d.setColor(Color.blue);
         List<Integer> xPoints = new ArrayList<>();
-        List<Integer> yPoints = new ArrayList();
-        pins.forEach(pin ->{
+        List<Integer> yPoints = new ArrayList<>();
+        pins.forEach(pin -> {
             xPoints.add(pin.getX());
             yPoints.add(pin.getY());
-            g2d.fillOval(pin.getX()-PIN_SIZE /2, pin.getY()-PIN_SIZE/2 , PIN_SIZE, PIN_SIZE);
+            g2d.fillOval(pin.getX() - PIN_SIZE / 2, pin.getY() - PIN_SIZE / 2, PIN_SIZE, PIN_SIZE);
             this.setVisible(true);
             g2d.setColor(pin.getColor());
         });
@@ -72,6 +69,7 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
         g2d.setColor(Color.black);
         g2d.drawPolygon(mapShape);
     }
+
     public void addPin(int x, int y, String name, Color color) {
         Pin pin = new Pin(x, y, name, color);
         pins.add(pin);
@@ -98,7 +96,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        // not implemented
 
         log.info("TranslateX: " + translateX + ", TranslateY: " + translateY);
         int currentMouseX = e.getX();
@@ -111,7 +108,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
         prevMouseY = currentMouseY;
         revalidate();
         repaint();
-
     }
 
     @Override
@@ -124,6 +120,12 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
         }
         repaint();
     }
+
+    public void setCoordinates(List<Coordinate> coordinates) {
+        removeAll();
+        coordinates.forEach(coordinate -> addPin(Integer.parseInt(coordinate.getX()), Integer.parseInt(coordinate.getY()), coordinate.getName(), Color.magenta));
+    }
+
     @Setter
     @Getter
     @Builder

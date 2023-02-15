@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
         this.setSize(new Dimension(width, height));
         this.setResizable(true);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle("Map");
+        this.setTitle("Map Drawer");
         this.setMenuBar(helpMenu);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, contentPanel, buttonPanel);
