@@ -4,7 +4,15 @@ plugins {
 
 group 'com.negin'
 version '1.0-SNAPSHOT'
+apply plugin: 'maven-publish'
 
+publishing {
+    repositories {
+        maven {
+            url = uri('https://github.com/neginii/map-drawer')
+        }
+    }
+}
 repositories {
     mavenCentral()
 }

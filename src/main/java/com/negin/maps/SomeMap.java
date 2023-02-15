@@ -7,12 +7,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -39,12 +41,8 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
     public SomeMap(List<Coordinate> coordinates) {
 
         this.setLayout(new BorderLayout());
-        int[] xPoints = coordinates.stream().mapToInt(coordinate -> Integer.parseInt(coordinate.getX())).toArray();
-        int[] yPoints = coordinates.stream().mapToInt(coordinate -> Integer.parseInt(coordinate.getY())).toArray();
-
-        mapShape = new Polygon(xPoints, yPoints, xPoints.length);
-        coordinates.forEach(coordinate -> addPin(Integer.parseInt(coordinate.getX()), Integer.parseInt(coordinate.getY()), coordinate.getName(), Color.magenta));
-
+        this.setVisible(true);
+       coordinates.forEach(coordinate -> addPin(Integer.parseInt(coordinate.getX()), Integer.parseInt(coordinate.getY()), coordinate.getName(), Color.magenta));
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
         this.setVisible(true);
@@ -59,18 +57,21 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
         transform.scale(scale, scale);
         transform.translate(translateX, translateY);
         g2d.setTransform(transform);
-
         g2d.setColor(Color.blue);
+        List<Integer> xPoints = new ArrayList<>();
+        List<Integer> yPoints = new ArrayList();
+        pins.forEach(pin ->{
+            xPoints.add(pin.getX());
+            yPoints.add(pin.getY());
+            g2d.fillOval(pin.getX()-PIN_SIZE /2, pin.getY()-PIN_SIZE/2 , PIN_SIZE, PIN_SIZE);
+            this.setVisible(true);
+            g2d.setColor(pin.getColor());
+        });
+
+        mapShape = new Polygon(xPoints.stream().mapToInt(Integer::intValue).toArray(), yPoints.stream().mapToInt(Integer::intValue).toArray(), xPoints.size());
+        g2d.setColor(Color.black);
         g2d.drawPolygon(mapShape);
-        for (Pin pin : pins) {
-            int x = pin.getX();
-            int y = pin.getY();
-            g.fillOval(x - PIN_SIZE / 2, y - PIN_SIZE / 2, PIN_SIZE, PIN_SIZE);
-            g.setColor(pin.getColor());
-        }
     }
-
-
     public void addPin(int x, int y, String name, Color color) {
         Pin pin = new Pin(x, y, name, color);
         pins.add(pin);
@@ -91,7 +92,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
                 break;
             }
         }
-
         setToolTipText(found ? label : null);
         repaint();
     }
@@ -124,8 +124,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
         }
         repaint();
     }
-
-
     @Setter
     @Getter
     @Builder
