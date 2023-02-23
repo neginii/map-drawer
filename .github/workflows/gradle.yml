@@ -25,6 +25,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
-        asset_path: ./build/libs/map-drawer.jar
-        asset_name: map-drawer.jar
-        asset_content_type: application/java-archive
+        path: ./build/libs/map-drawer.jar
+        name: map-drawer.jar
