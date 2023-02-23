@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 public class AboutMeDialog extends JDialog {
 
@@ -25,12 +26,15 @@ public class AboutMeDialog extends JDialog {
         setAlwaysOnTop(true);
         setVisible(false);
 
-        JLabel nameLabel = new JLabel("Name: " + name);
-        JLabel emailLabel = new JLabel("Email: " + emailAddress);
-        JLabel mobileLabel = new JLabel("Mobile: " + mobileNumber);
+        SwingUtilities.invokeLater(() -> {
+            JLabel nameLabel = new JLabel("Name: " + name);
+            JLabel emailLabel = new JLabel("Email: " + emailAddress);
+            JLabel mobileLabel = new JLabel("Mobile: " + mobileNumber);
 
-        add(nameLabel);
-        add(emailLabel);
-        add(mobileLabel);
+            add(nameLabel);
+            add(emailLabel);
+            add(mobileLabel);
+        });
+
     }
 }

@@ -5,8 +5,15 @@ import lombok.Data;
 @Data
 public class Coordinate {
 
-    private Long id;
+    public Coordinate(String x, String y, String name) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+    }
+
     private String x;
     private String y;
     private String name;
+
+
 }

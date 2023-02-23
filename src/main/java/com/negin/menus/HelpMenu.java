@@ -9,6 +9,8 @@ import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.SwingUtilities;
+
 public class HelpMenu extends MenuBar implements ActionListener {
 
     private final AboutMeDialog aboutMeDialog;
@@ -17,12 +19,14 @@ public class HelpMenu extends MenuBar implements ActionListener {
 
         this.aboutMeDialog = aboutMeDialog;
 
-        Menu helpMenu = new Menu("Help");
-        MenuItem contactMeMenuItem = new MenuItem("Contact Me");
-        contactMeMenuItem.addActionListener(this);
-        helpMenu.add(contactMeMenuItem);
+        SwingUtilities.invokeLater(() -> {
+            Menu helpMenu = new Menu("Help");
+            MenuItem contactMeMenuItem = new MenuItem("Contact Me");
+            contactMeMenuItem.addActionListener(this);
+            helpMenu.add(contactMeMenuItem);
 
-        this.add(helpMenu);
+            this.add(helpMenu);
+        });
     }
 
     @Override

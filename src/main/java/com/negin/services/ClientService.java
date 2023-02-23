@@ -1,6 +1,5 @@
 package com.negin.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.negin.dialogs.NetworkProblemDialog;
 import com.negin.models.Coordinate;
 
@@ -9,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,24 +19,38 @@ public class ClientService {
 
     public List<Coordinate> getCoordinates() {
         List<Coordinate> data = new ArrayList<>();
+
+        String servletUrl = "http://daily.digpro.se/bios/servlet/bios.servlets.web.RecruitmentTestServlet"; // Replace with the URL of your servlet
+        String targetLine = "# Data: (X, Y, Name)";
+
         int retries = 10;
         while (retries > 0) {
             try {
-                URL url = new URL("http://localhost:8080/map/coordinates");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                int responseCode = connection.getResponseCode();
-                if (responseCode == 200) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    ObjectMapper mapper = new ObjectMapper();
-                    data = mapper.readValue(response.toString(), mapper.getTypeFactory().constructCollectionType(List.class, Coordinate.class));
-                    break;
+                URL url = new URL(servletUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.ISO_8859_1));
+                boolean foundTargetLine = reader.lines()
+                        .anyMatch(targetLine::equals);
+
+                if (foundTargetLine) {
+                    reader.lines()
+                            .skip(1)
+                            .forEach(line -> {
+                                String[] parts = line.split(",\\s*");
+                                if (parts.length == 3) {
+                                    String x = parts[0];
+                                    String y = parts[1];
+                                    String name = parts[2];
+                                    data.add(new Coordinate(x, y, name));
+                                }
+                            });
+
                 }
+                reader.close();
+                conn.disconnect();
+                retries = 0;
             } catch (IOException e) {
                 retries--;
                 log.warn("There seems to be a problem reaching the remote server due to '{}'", e.getMessage());

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class ButtonPanel extends JPanel implements ActionListener {
 
@@ -15,29 +16,30 @@ public class ButtonPanel extends JPanel implements ActionListener {
     public static final String EXIT = "Exit";
     public static final String DISABLE_AUTO_REFRESH = "Disable Auto Refresh";
     private final ContentPanel contentPanel;
-    private final JButton autoRefreshBtn;
+    private JButton autoRefreshBtn;
 
     public ButtonPanel(ContentPanel contentPanel) {
         this.contentPanel = contentPanel;
 
         this.setLayout(new GridLayout(1, 3));
-        // Buttons
+        SwingUtilities.invokeLater(() -> {
+            // Buttons
+            JButton refreshManuallyBtn = new JButton(REFRESH);
+            refreshManuallyBtn.setPreferredSize(new Dimension(200, 100));
+            autoRefreshBtn = new JButton(ENABLE_AUTO_REFRESH);
+            autoRefreshBtn.setPreferredSize(new Dimension(200, 100));
+            JButton exitButton = new JButton(EXIT);
+            exitButton.setPreferredSize(new Dimension(200, 100));
 
-        JButton refreshManuallyBtn = new JButton(REFRESH);
-        refreshManuallyBtn.setPreferredSize(new Dimension(200, 100));
-        autoRefreshBtn = new JButton(ENABLE_AUTO_REFRESH);
-        autoRefreshBtn.setPreferredSize(new Dimension(200, 100));
-        JButton exitButton = new JButton(EXIT);
-        exitButton.setPreferredSize(new Dimension(200, 100));
-
-        // Button Listeners
-        refreshManuallyBtn.addActionListener(this);
-        autoRefreshBtn.addActionListener(this);
-        exitButton.addActionListener(this);
-        this.add(refreshManuallyBtn);
-        this.add(autoRefreshBtn);
-        this.add(exitButton);
-        this.setVisible(true);
+            // Button Listeners
+            refreshManuallyBtn.addActionListener(this);
+            autoRefreshBtn.addActionListener(this);
+            exitButton.addActionListener(this);
+            this.add(refreshManuallyBtn);
+            this.add(autoRefreshBtn);
+            this.add(exitButton);
+            this.setVisible(true);
+        });
     }
 
     @Override
@@ -71,5 +73,7 @@ public class ButtonPanel extends JPanel implements ActionListener {
                 break;
             }
         }
+
     }
+
 }

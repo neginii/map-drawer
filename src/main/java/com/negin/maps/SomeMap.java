@@ -2,7 +2,6 @@ package com.negin.maps;
 
 import com.negin.models.Coordinate;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -38,8 +37,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
 
     public SomeMap() {
 
-        this.setLayout(new BorderLayout());
-        this.setVisible(true);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
         this.setVisible(true);
@@ -73,7 +70,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
     public void addPin(int x, int y, String name, Color color) {
         Pin pin = new Pin(x, y, name, color);
         pins.add(pin);
-        repaint();
     }
 
     @Override
@@ -96,7 +92,6 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
         log.info("TranslateX: " + translateX + ", TranslateY: " + translateY);
         int currentMouseX = e.getX();
         int currentMouseY = e.getY();
@@ -122,8 +117,9 @@ public class SomeMap extends JComponent implements MouseMotionListener, MouseWhe
     }
 
     public void setCoordinates(List<Coordinate> coordinates) {
-        removeAll();
+        pins.clear();
         coordinates.forEach(coordinate -> addPin(Integer.parseInt(coordinate.getX()), Integer.parseInt(coordinate.getY()), coordinate.getName(), Color.magenta));
+        repaint();
     }
 
     @Setter

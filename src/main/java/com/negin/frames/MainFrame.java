@@ -9,26 +9,29 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
 public class MainFrame extends JFrame {
 
     public MainFrame(HelpMenu helpMenu, ContentPanel contentPanel, ButtonPanel buttonPanel) {
 
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = toolkit.getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
+        SwingUtilities.invokeLater(() -> {
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Dimension screenSize = toolkit.getScreenSize();
+            int width = (int) screenSize.getWidth();
+            int height = (int) screenSize.getHeight();
 
-        this.setSize(new Dimension(width, height));
-        this.setResizable(true);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle("Map Drawer");
-        this.setMenuBar(helpMenu);
+            this.setSize(new Dimension(width, height));
+            this.setResizable(true);
+            this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+            this.setTitle("Map Drawer");
+            this.setMenuBar(helpMenu);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, contentPanel, buttonPanel);
-        splitPane.setDividerLocation(height - 150);
+            JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, contentPanel, buttonPanel);
+            splitPane.setDividerLocation(height - 150);
 
-        this.add(splitPane);
-        this.setVisible(true);
+            this.add(splitPane);
+            this.setVisible(true);
+        });
     }
 }
