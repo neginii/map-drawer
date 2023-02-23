@@ -1,4 +1,4 @@
-name: Build and Release Executable JAR
+name: Build and Upload Executable JAR
 
 on:
   push:
@@ -9,33 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+
+    - name: Checkout
+      uses: actions/checkout@v3.3.0
+
     - name: Set up JDK 11
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3.10.0
       with:
         java-version: 11
+
     - name: Build with Gradle
       run: ./gradlew shadowJar
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.2
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
-        body: |
-          Changes in this Release:
-          - Executable JAR built with Gradle Shadow Plugin.
-        draft: false
-        prerelease: false
-    - name: Upload Artifact
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/libs/map-drawer.jar
         asset_name: map-drawer.jar
         asset_content_type: application/java-archive
